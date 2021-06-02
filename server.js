@@ -7,8 +7,7 @@ const mongoose= require( "mongoose");
 const server=express();
 server.use(cors());
 server.use(express.json())
-const PORT=3020
-
+const PORT=process.env.PORT
 mongoose.connect('mongodb://Ahmad-Mohammad:A-12345678@301-shard-00-00.om6or.mongodb.net:27017,301-shard-00-01.om6or.mongodb.net:27017,301-shard-00-02.om6or.mongodb.net:27017/books?ssl=true&replicaSet=atlas-23q8aw-shard-0&authSource=admin&retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
 const BookSchema  = new mongoose.Schema({
