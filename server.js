@@ -9,7 +9,7 @@ server.use(cors());
 server.use(express.json())
 const PORT=3020
 
-mongoose.connect('mongodb://localhost:27017/book', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://Ahmad-Mohammad:A-12345678@301-shard-00-00.om6or.mongodb.net:27017,301-shard-00-01.om6or.mongodb.net:27017,301-shard-00-02.om6or.mongodb.net:27017/books?ssl=true&replicaSet=atlas-23q8aw-shard-0&authSource=admin&retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
 const BookSchema  = new mongoose.Schema({
     bookName:String,
@@ -77,6 +77,7 @@ function seedUserColection(){
 
 // create resource http:localhost:3000/books?email=x
 server.get('/books',getBooks);
+
 function getBooks(request,response){
     let emailrequest=request.query.email;
     myUserModel.find({email:emailrequest},function(err,data){
@@ -132,6 +133,27 @@ function deleteData(req,res){
         }
     })
 }  
+// update value 
+
+server.put('/updateBook/:index',updateData)
+function updateData(req,res){
+    const index=req.params.index;
+    const{ email, imageURL,bookName,description}=req.body;
+    myUserModel.find({email:email},(error,result)=>{
+        if( error){
+            console.log('there is an erro')
+        }else{
+            result[0].books.splice(index,1,{
+                bookName:bookName,
+                description:description,
+                img:imageURL
+            })
+            console.log(result[0].books)
+            result[0].save();
+            res.send(result[0].books);
+        }
+    })
+}
 
 // test 
 server.get('/test',(req,res)=>{
